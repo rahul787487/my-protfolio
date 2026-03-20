@@ -1,6 +1,11 @@
 import React from 'react'
-import { FaInstagram, FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
-import { Link } from 'react-scroll'
+import { FaEnvelope, FaGithub } from 'react-icons/fa'
+import { siteConfig, socialLinks } from '../data/siteConfig'
+
+const iconMap = {
+  github: FaGithub,
+  mail: FaEnvelope,
+}
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -10,6 +15,7 @@ const Footer = () => {
     { id: 2, label: 'About', link: 'about' },
     { id: 3, label: 'Portfolio', link: 'portfolio' },
     { id: 4, label: 'Experience', link: 'experience' },
+    { id: 5, label: 'Contact', link: 'contact' },
   ]
 
   const services = [
@@ -19,106 +25,85 @@ const Footer = () => {
     { id: 4, title: 'API Integration' },
   ]
 
-  const socialLinks = [
-    { id: 1, icon: FaGithub, url: 'https://github.com', label: 'GitHub' },
-    { id: 2, icon: FaLinkedin, url: 'https://linkedin.com', label: 'LinkedIn' },
-    { id: 3, icon: FaTwitter, url: 'https://twitter.com', label: 'Twitter' },
-    { id: 4, icon: FaInstagram, url: 'https://instagram.com', label: 'Instagram' },
-  ]
-
   return (
-    <footer className='w-full bg-gradient-to-t from-black via-gray-900 to-gray-800 text-white py-12'>
-      <div className='max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8'>
-        
-        {/* Grid Layout - Responsive */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12'>
-          
-          {/* Quick Links Section */}
+    <footer className='w-full bg-gradient-to-t from-black via-gray-900 to-gray-800 py-12 text-white'>
+      <div className='mx-auto max-w-screen-lg px-4 sm:px-6 lg:px-8'>
+        <div className='mb-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4'>
           <div>
-            <h3 className='text-xl font-bold mb-6 border-b-2 border-cyan-500 pb-2 inline-block'>Quick Links</h3>
+            <h3 className='mb-6 inline-block border-b-2 border-cyan-500 pb-2 text-xl font-bold'>Quick Links</h3>
             <ul className='space-y-3'>
               {quickLinks.map(({ id, label, link }) => (
                 <li key={id}>
-                  <Link
-                    to={link}
-                    smooth
-                    duration={500}
-                    offset={-80}
-                    className='text-gray-400 hover:text-cyan-400 transition duration-300 cursor-pointer'
+                  <a
+                    href={`#${link}`}
+                    className='cursor-pointer text-gray-400 transition duration-300 hover:text-cyan-400'
                   >
                     {label}
-                  </Link>
+                  </a>
                 </li>
               ))}
-              <li>
-                <Link
-                  to='contact'
-                  smooth
-                  duration={500}
-                  offset={-80}
-                  className='text-gray-400 hover:text-cyan-400 transition duration-300 cursor-pointer'
-                >
-                  Contact
-                </Link>
-              </li>
             </ul>
           </div>
 
-          {/* Services Section */}
           <div>
-            <h3 className='text-xl font-bold mb-6 border-b-2 border-cyan-500 pb-2 inline-block'>Services</h3>
+            <h3 className='mb-6 inline-block border-b-2 border-cyan-500 pb-2 text-xl font-bold'>Services</h3>
             <ul className='space-y-3'>
               {services.map(({ id, title }) => (
-                <li key={id} className='text-gray-400 hover:text-cyan-400 transition duration-300 cursor-pointer'>
+                <li key={id} className='cursor-pointer text-gray-400 transition duration-300 hover:text-cyan-400'>
                   {title}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Reach Me Section */}
           <div>
-            <h3 className='text-xl font-bold mb-6 border-b-2 border-cyan-500 pb-2 inline-block'>Reach Me</h3>
+            <h3 className='mb-6 inline-block border-b-2 border-cyan-500 pb-2 text-xl font-bold'>Reach Me</h3>
             <ul className='space-y-3 text-gray-400'>
-              <li className='hover:text-cyan-400 transition duration-300'>
-                📍 India
-              </li>
-              <li className='hover:text-cyan-400 transition duration-300'>
-                📱 +91 6351420598
-              </li>
-              <li className='hover:text-cyan-400 transition duration-300 break-all'>
-                📧 rahul968713@gmail.com
+              <li className='transition duration-300 hover:text-cyan-400'>{siteConfig.location}</li>
+              <li className='transition duration-300 hover:text-cyan-400'>{siteConfig.phone}</li>
+              <li className='break-all transition duration-300 hover:text-cyan-400'>
+                <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
               </li>
             </ul>
           </div>
 
-          {/* Social Links Section */}
           <div>
-            <h3 className='text-xl font-bold mb-6 border-b-2 border-cyan-500 pb-2 inline-block'>Follow Me</h3>
-            <div className='flex gap-4 flex-wrap'>
-              {socialLinks.map(({ id, icon: Icon, url, label }) => (
-                <a
-                  key={id}
-                  href={url}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-gray-400 hover:text-cyan-400 hover:scale-110 transition duration-300 text-2xl'
-                  title={label}
-                >
-                  <Icon />
-                </a>
-              ))}
+            <h3 className='mb-6 inline-block border-b-2 border-cyan-500 pb-2 text-xl font-bold'>Profiles</h3>
+            <div className='flex flex-wrap gap-3'>
+              {socialLinks.map(({ id, href, label, icon }) => {
+                const Icon = iconMap[icon]
+
+                return (
+                  <a
+                    key={id}
+                    href={href}
+                    target={href.startsWith('mailto:') ? undefined : '_blank'}
+                    rel={href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                    className='flex items-center gap-2 rounded-full border border-gray-700 px-4 py-2 text-sm text-gray-300 transition duration-300 hover:border-cyan-400 hover:text-cyan-300'
+                    title={label}
+                  >
+                    <Icon />
+                    {label}
+                  </a>
+                )
+              })}
             </div>
+            <a
+              href={siteConfig.githubRepo}
+              target='_blank'
+              rel='noreferrer'
+              className='mt-5 inline-flex items-center rounded-md bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200 transition duration-300 hover:bg-cyan-500/20'
+            >
+              View Portfolio Repository
+            </a>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className='border-t border-gray-700 my-8'></div>
+        <div className='my-8 border-t border-gray-700'></div>
 
-        {/* Bottom Copyright Section */}
-        <div className='text-center text-gray-400 text-sm sm:text-base'>
+        <div className='text-center text-sm text-gray-400 sm:text-base'>
           <p>
-            © {currentYear} Rahul. Made with <span className='text-red-500'>❤️</span> in India
+            Copyright {currentYear} {siteConfig.name}. Built with care in India.
           </p>
           <p className='mt-2 text-xs sm:text-sm'>
             Full Stack Developer | React | Node.js | MongoDB

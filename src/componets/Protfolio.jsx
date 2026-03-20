@@ -1,4 +1,5 @@
 import React from 'react'
+import { siteConfig } from '../data/siteConfig'
 
 const Protfolio = () => {
 
@@ -35,29 +36,55 @@ const Protfolio = () => {
         },
     ]
 
+    const getActionLink = (url, fallbackHref, fallbackLabel, defaultLabel) => {
+        const isExternal = /^https?:\/\//.test(url)
+
+        return {
+            href: url || fallbackHref,
+            label: url ? defaultLabel : fallbackLabel,
+            rel: isExternal ? 'noreferrer' : undefined,
+            target: isExternal ? '_blank' : undefined,
+        }
+    }
+
 
     return (
-        <div name="portfolio" className='w-full md:h-screen bg-gradient-to-b from-black to-gray-800 text-white'>
-            <div className='max-w-screen-lg p-4 mx-auto flex flex-col justify-center w-full h-full'>
+        <div id="portfolio" name="portfolio" className='w-full scroll-mt-20 bg-gradient-to-b from-black to-gray-800 pb-24 text-white md:pb-12'>
+            <div className='mx-auto flex h-full w-full max-w-screen-lg flex-col justify-center p-4'>
                 <div className='pb-8'>
                     <p className='text-4xl font-bold inline border-b-4
-                    border-gray-500'>Protfolio</p>
+                    border-gray-500'>Project</p>
                     <p className='py-6 '>Here are some of my works</p>
                 </div>
-                <div className='grid sm:grid-cols-2 md:grid-cols-3 gap-8 px-12 sm:px-0'>
-                    {Protfolios.map(({ id, src, demo, code }) => (
-                        <div key={id} className='shadow-md shadow-gray-600 rounded-lg'>
-                            <img
-                              src={src}
-                              alt=""
-                              className="rounded-md duration-200 hover:scale-105 w-full h-48 object-cover"
-                            />
-                            <div className='flex items-center justify-center '>
-                                <button className='w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105 bg-gradient-to-br from-teal-200  rounded-md'>Demo</button>
-                                <button className='w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105 bg-gradient-to-br from-teal-200 rounded-md '>Code</button>
+                <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+                    {Protfolios.map(({ id, src, demo, code }) => {
+                        const demoLink = getActionLink(demo, '#contact', 'Contact Rahul', 'Demo')
+                        const codeLink = getActionLink(code, siteConfig.githubProfile, 'GitHub Profile', 'Code')
+
+                        return (
+                            <div key={id} className='overflow-hidden rounded-lg shadow-md shadow-gray-600'>
+                                <img
+                                  src={src}
+                                  alt="Project preview"
+                                  className="h-48 w-full rounded-md object-cover duration-200 hover:scale-105"
+                                />
+                                <div className='flex flex-col gap-3 p-4 sm:flex-row'>
+                                    <a
+                                      {...demoLink}
+                                      className='w-full rounded-md bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-3 text-center font-medium text-white transition duration-200 hover:scale-[1.02]'
+                                    >
+                                      {demoLink.label}
+                                    </a>
+                                    <a
+                                      {...codeLink}
+                                      className='w-full rounded-md border border-cyan-400 px-4 py-3 text-center font-medium text-cyan-200 transition duration-200 hover:scale-[1.02] hover:bg-cyan-400/10'
+                                    >
+                                      {codeLink.label}
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
             </div>
         </div>

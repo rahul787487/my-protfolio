@@ -17,28 +17,28 @@ const Experience = () => {
   ]
 
   return (
-    <div name="experience" className="w-full min-h-screen bg-gradient-to-b from-gray-800 to-black">
+    <div id="experience" name="experience" className="w-full min-h-screen bg-gradient-to-b from-gray-800 to-black scroll-mt-20">
       <div className="max-w-screen-lg p-4 mx-auto flex flex-col justify-center w-full h-full text-white">
         <div>
-          <p className="text-4xl font-bold border-b-4 border-gray-500 p-2 inline">Skills</p>
-          <p className="py-6">These are my core skills with proficiency levels</p>
+          <p className='text-4xl font-bold inline border-b-4 border-gray-500'>Skills</p>
+          <p className='text-xl mt-20'>These are my core skills with proficiency levels</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {technologies.map(({ id, src, title, percent, style }) => (
-            <div key={id} className={`bg-gray-900/50 p-4 rounded-lg ${style}`}>
-              <div className="flex items-center gap-4">
-                <img src={src} alt={`${title} logo`} className="w-12 h-12 object-contain transition-transform duration-300 hover:scale-110" />
+            <div key={id} className={`bg-gray-900/30 p-6 rounded-xl ${style} transition-all duration-500 hover:bg-gray-900/70 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-400/50 backdrop-blur-sm border border-gray-700/50 hover:border-cyan-400/50 animate-fade-in`}>
+              <div className="flex items-center gap-4 mb-4">
+                <img src={src} alt={`${title} logo`} className="w-12 h-12 object-contain transition-transform duration-300 hover:scale-110 hover:rotate-12" />
                 <div>
-                  <p className="text-lg font-semibold">{title}</p>
-                  <p className="text-sm text-gray-400">{percent}%</p>
+                  <p className="text-lg font-semibold text-white transition-all duration-300 hover:text-cyan-400 hover:scale-110 hover:drop-shadow-lg hover:drop-shadow-cyan-400">{title}</p>
+                  <p className="text-sm text-gray-300">{percent}%</p>
                 </div>
               </div>
 
               <div className="mt-4">
-                <div className="w-full bg-gray-700 rounded-full h-3">
+                <div className="w-full bg-gray-700/50 rounded-full h-3 overflow-hidden">
                   <div
-                    className="bg-cyan-400 h-3 rounded-full"
+                    className="bg-gradient-to-r from-cyan-400 to-blue-500 h-3 rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${percent}%` }}
                     role="progressbar"
                     aria-valuenow={percent}

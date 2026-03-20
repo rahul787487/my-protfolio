@@ -21,7 +21,6 @@ const AnimatedBackground = () => {
       Render = window.Matter.Render,
       World = window.Matter.World,
       Body = window.Matter.Body,
-      Mouse = window.Matter.Mouse,
       Common = window.Matter.Common,
       Bodies = window.Matter.Bodies;
 
@@ -154,20 +153,28 @@ const AnimatedBackground = () => {
       World.add(world, circle3);
     }
 
-    // add mouse control
-    const mouse = Mouse.create(document.body);
+    const pointer = { x: null, y: null };
+
+    const handlePointerMove = (event) => {
+      const touch = event.touches?.[0];
+      const source = touch ?? event;
+
+      pointer.x = source.clientX;
+      pointer.y = source.clientY;
+    };
 
     Events.on(engine, "afterUpdate", function () {
-      if (!mouse.position.x) return;
+      if (pointer.x == null || pointer.y == null) return;
       // smoothly move the attractor body towards the mouse
       Body.translate(attractiveBody, {
-        x: (mouse.position.x - attractiveBody.position.x) * 0.12,
-        y: (mouse.position.y - attractiveBody.position.y) * 0.12,
+        x: (pointer.x - attractiveBody.position.x) * 0.12,
+        y: (pointer.y - attractiveBody.position.y) * 0.12,
       });
     });
 
     Runner.run(runner, engine);
     Render.run(render);
+    render.canvas.style.pointerEvents = 'none';
 
     // Handle resize: update renderer and reposition attractor
     const handleResize = () => {
@@ -186,13 +193,18 @@ const AnimatedBackground = () => {
       // ensure canvas fills container
       render.canvas.style.width = '100%';
       render.canvas.style.height = '100%';
+      render.canvas.style.pointerEvents = 'none';
     };
 
     window.addEventListener('resize', handleResize);
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('touchmove', handlePointerMove, { passive: true });
 
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('touchmove', handlePointerMove);
       Render.stop(render);
       Runner.stop(runner);
       World.clear(engine.world);
